@@ -1,6 +1,7 @@
 package by.itacademy.hibernate;
 
 import by.itacademy.hibernate.entity.Company;
+import by.itacademy.hibernate.entity.Profile;
 import by.itacademy.hibernate.entity.User;
 import lombok.Cleanup;
 import org.hibernate.cfg.Configuration;
@@ -10,6 +11,27 @@ import java.sql.SQLException;
 
 
 class HibernateRunnerTest {
+
+    @Test
+    public void checkOneToOne() {
+        Configuration configuration = new Configuration();
+        configuration.configure();
+        @Cleanup var sessionFactory = configuration.buildSessionFactory();
+        @Cleanup var session = sessionFactory.openSession();
+        session.beginTransaction();
+        var user = User.builder()
+                .username("test2@gmail.com")
+                .build();
+        System.out.println(session.get(User.class, 7L));
+        /*var profile = Profile.builder()
+                .language("ru")
+                .street("Skryganova 14")
+                .build();
+        profile.setUser(user);
+        session.save(user);*/
+        session.getTransaction().commit();
+    }
+
     @Test
     public void checkInitEx() {
         Company company = null;

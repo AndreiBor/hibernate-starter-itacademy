@@ -13,6 +13,7 @@
     <property name="format_sql">true</property>
     <mapping class="by.itacademy.hibernate.entity.User"/>
     <mapping class="by.itacademy.hibernate.entity.Company"/>
+    <mapping class="by.itacademy.hibernate.entity.Profile"/>
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
   </session-factory>
