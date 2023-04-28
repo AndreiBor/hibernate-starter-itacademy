@@ -1,27 +1,87 @@
 package by.itacademy.hibernate;
 
-import by.itacademy.hibernate.entity.Birthday;
+import by.itacademy.hibernate.entity.Company;
 import by.itacademy.hibernate.entity.User;
+import lombok.Cleanup;
+import org.hibernate.cfg.Configuration;
 import org.junit.jupiter.api.Test;
 
-import javax.persistence.Column;
-import javax.persistence.Table;
-import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class HibernateRunnerTest {
     @Test
+    public void checkInitEx() {
+        Company company = null;
+        Configuration configuration = new Configuration();
+        configuration.configure();
+        @Cleanup var sessionFactory = configuration.buildSessionFactory();
+        @Cleanup var session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        company = session.getReference(Company.class, 1);
+
+        session.getTransaction().commit();
+        session.close();
+        var users = company.getUsers();
+        System.out.println(users.size());
+    }
+
+
+    @Test
+    public void deleteCompany() {
+        Configuration configuration = new Configuration();
+        configuration.configure();
+        @Cleanup var sessionFactory = configuration.buildSessionFactory();
+        @Cleanup var session = sessionFactory.openSession();
+        session.beginTransaction();
+        var user = session.get(User.class, 4L);
+        session.delete(user);
+
+        session.getTransaction().commit();
+    }
+
+
+    @Test
+    public void addUserToNewCompany() {
+        Configuration configuration = new Configuration();
+        configuration.configure();
+        @Cleanup var sessionFactory = configuration.buildSessionFactory();
+        @Cleanup var session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        var company = Company.builder()
+                .name("Integral")
+                .build();
+
+        var user = User.builder()
+                .username("int@mail.com")
+                .build();
+
+        company.addUser(user);
+
+        session.save(company);
+        session.getTransaction().commit();
+    }
+
+    @Test
+    public void oneToMany() {
+        Configuration configuration = new Configuration();
+        configuration.configure();
+        @Cleanup var sessionFactory = configuration.buildSessionFactory();
+        @Cleanup var session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        var company = session.get(Company.class, 1);
+        System.out.println(company.getUsers());
+
+        session.getTransaction().commit();
+
+    }
+
+    @Test
     void checkApi() throws SQLException, IllegalAccessException {
-        User user = User.builder()
+    /*    User user = User.builder()
                 .username("ivan1@gmail.com")
                 .firstname("Ivan")
                 .lastname("Ivanov")
@@ -65,6 +125,6 @@ class HibernateRunnerTest {
 
         preparedStatement.executeUpdate();
         connection.close();
-
+*/
     }
 }

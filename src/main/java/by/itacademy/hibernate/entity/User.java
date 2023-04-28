@@ -1,28 +1,31 @@
 package by.itacademy.hibernate.entity;
 
 import by.itacademy.hibernate.convertor.BirthdayConvertor;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "username")
+@ToString(exclude = "company")
 @Builder
 @Entity
 @Table(name = "users", schema = "public")
-public class User {
+public class User{
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String username;
-    private String firstname;
-    private String lastname;
-    @Convert(converter = BirthdayConvertor.class)
-    @Column(name = "birth_date")
-    private Birthday birthDate;
+    private PersonalInfo personalInfo;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    //@JoinColumn(name = "company_id")
+    private Company company;
 }
