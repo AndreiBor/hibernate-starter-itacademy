@@ -1,5 +1,6 @@
 package by.itacademy.hibernate;
 
+import by.itacademy.hibernate.entity.Chat;
 import by.itacademy.hibernate.entity.Company;
 import by.itacademy.hibernate.entity.Profile;
 import by.itacademy.hibernate.entity.User;
@@ -11,6 +12,23 @@ import java.sql.SQLException;
 
 
 class HibernateRunnerTest {
+    @Test
+    public void checkManyToMany() {
+        Configuration configuration = new Configuration();
+        configuration.configure();
+        @Cleanup var sessionFactory = configuration.buildSessionFactory();
+        @Cleanup var session = sessionFactory.openSession();
+        session.beginTransaction();
+        var user = session.get(User.class, 7L);
+        var chat = Chat.builder()
+                .name("itacademy")
+                .build();
+
+        user.addChat(chat);
+        session.save(chat);
+
+        session.getTransaction().commit();
+    }
 
     @Test
     public void checkOneToOne() {
