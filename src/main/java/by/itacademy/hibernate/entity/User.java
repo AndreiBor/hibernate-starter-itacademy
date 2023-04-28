@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "username")
-@ToString(exclude = {"company", "profile", "chats"})
+@ToString(exclude = {"company", "profile", "chats", "userChats"})
 @Builder
 @Entity
 @Table(name = "users", schema = "public")
@@ -34,16 +34,9 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = false)
     private Profile profile;
 
-    @Builder.Default
-    @ManyToMany
-    @JoinTable(name = "users_chat",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "chat_id"))
-    private List<Chat> chats = new ArrayList<>();
 
-    public void addChat(Chat chat) {
-        chats.add(chat);
-        chat.getUsers().add(this);
-    }
+    @Builder.Default
+    @OneToMany(mappedBy = "user")
+    private List<UserChat> userChats = new ArrayList<>();
 
 }

@@ -15,6 +15,7 @@
     <mapping class="by.itacademy.hibernate.entity.Company"/>
     <mapping class="by.itacademy.hibernate.entity.Profile"/>
     <mapping class="by.itacademy.hibernate.entity.Chat"/>
+    <mapping class="by.itacademy.hibernate.entity.UserChat"/>
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
   </session-factory>

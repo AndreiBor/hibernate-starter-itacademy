@@ -1,14 +1,13 @@
 package by.itacademy.hibernate;
 
-import by.itacademy.hibernate.entity.Chat;
-import by.itacademy.hibernate.entity.Company;
-import by.itacademy.hibernate.entity.Profile;
-import by.itacademy.hibernate.entity.User;
+import by.itacademy.hibernate.entity.*;
 import lombok.Cleanup;
+import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;
 import org.hibernate.cfg.Configuration;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
+import java.time.Instant;
 
 
 class HibernateRunnerTest {
@@ -16,17 +15,22 @@ class HibernateRunnerTest {
     public void checkManyToMany() {
         Configuration configuration = new Configuration();
         configuration.configure();
+        configuration.setPhysicalNamingStrategy(new CamelCaseToUnderscoresNamingStrategy());
         @Cleanup var sessionFactory = configuration.buildSessionFactory();
         @Cleanup var session = sessionFactory.openSession();
         session.beginTransaction();
         var user = session.get(User.class, 7L);
-        var chat = Chat.builder()
-                .name("itacademy")
+        var chat = session.get(Chat.class, 1L);
+
+        var userChat = UserChat.builder()
+                .createdAt(Instant.now())
+                .createdBy(user.getUsername())
                 .build();
 
-        user.addChat(chat);
-        session.save(chat);
+        userChat.setUser(user);
+        userChat.setChat(chat);
 
+        session.save(userChat);
         session.getTransaction().commit();
     }
 
