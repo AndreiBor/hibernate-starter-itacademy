@@ -1,6 +1,7 @@
 package by.itacademy.hibernate;
 
 import by.itacademy.hibernate.entity.*;
+import by.itacademy.hibernate.util.HibernateUtil;
 import lombok.Cleanup;
 import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;
 import org.hibernate.cfg.Configuration;
@@ -11,6 +12,22 @@ import java.time.Instant;
 
 
 class HibernateRunnerTest {
+
+    @Test
+    public void checkH2() {
+        @Cleanup var sessionFactory = HibernateUtil.getConfig().buildSessionFactory();
+        @Cleanup var session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        var company = Company.builder()
+                .name("Yandex")
+                .build();
+
+        session.save(company);
+
+        session.getTransaction().commit();
+    }
+
     @Test
     public void checkManyToMany() {
         Configuration configuration = new Configuration();
@@ -21,7 +38,7 @@ class HibernateRunnerTest {
         session.beginTransaction();
         var user = session.get(User.class, 7L);
         var chat = session.get(Chat.class, 1L);
-
+/*
         var userChat = UserChat.builder()
                 .createdAt(Instant.now())
                 .createdBy(user.getUsername())
@@ -30,7 +47,7 @@ class HibernateRunnerTest {
         userChat.setUser(user);
         userChat.setChat(chat);
 
-        session.save(userChat);
+        session.save(userChat);*/
         session.getTransaction().commit();
     }
 
