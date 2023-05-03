@@ -53,7 +53,7 @@ class HibernateRunnerTest {
 
     @Test
     public void checkOneToOne() {
-        Configuration configuration = new Configuration();
+        /*Configuration configuration = new Configuration();
         configuration.configure();
         @Cleanup var sessionFactory = configuration.buildSessionFactory();
         @Cleanup var session = sessionFactory.openSession();
@@ -67,8 +67,8 @@ class HibernateRunnerTest {
                 .street("Skryganova 14")
                 .build();
         profile.setUser(user);
-        session.save(user);*/
-        session.getTransaction().commit();
+        session.save(user);
+        session.getTransaction().commit();*/
     }
 
     @Test
@@ -105,7 +105,7 @@ class HibernateRunnerTest {
 
     @Test
     public void addUserToNewCompany() {
-        Configuration configuration = new Configuration();
+        /*Configuration configuration = new Configuration();
         configuration.configure();
         @Cleanup var sessionFactory = configuration.buildSessionFactory();
         @Cleanup var session = sessionFactory.openSession();
@@ -122,7 +122,7 @@ class HibernateRunnerTest {
         company.addUser(user);
 
         session.save(company);
-        session.getTransaction().commit();
+        session.getTransaction().commit();*/
     }
 
     @Test

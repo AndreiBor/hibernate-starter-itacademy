@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class HibernateRunner {
 
     public static void main(String[] args) {
-        Configuration configuration = new Configuration();
+        /*Configuration configuration = new Configuration();
         configuration.configure();
 
         Company company = Company.builder()
@@ -50,6 +50,6 @@ public class HibernateRunner {
         } catch (Exception e) {
             log.error("Exception occured", e);
             throw e;
-        }
+        }*/
     }
 }
