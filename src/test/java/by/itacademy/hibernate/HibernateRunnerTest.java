@@ -12,6 +12,41 @@ import java.time.Instant;
 
 
 class HibernateRunnerTest {
+    @Test
+    public void checkInheritance() {
+        @Cleanup var sessionFactory = HibernateUtil.getConfig().buildSessionFactory();
+        @Cleanup var session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        var company = Company.builder()
+                .name("Yandex")
+                .build();
+        session.save(company);
+
+        var programmer = Programmer.builder()
+                .username("ivan@gmail.com")
+                .language(Language.JAVA)
+                .company(company)
+                .build();
+        session.save(programmer);
+
+        var manager = Manager.builder()
+                .username("pavel@gmail.com")
+                .company(company)
+                .project("Java Enterprise")
+                .build();
+        session.save(manager);
+
+        session.flush();
+        session.clear();
+
+        var programmer1 = session.get(Programmer.class, 1L);
+        var manager1 = session.get(User.class, 2L);
+
+        System.out.println();
+
+        session.getTransaction().commit();
+    }
 
     @Test
     public void checkH2() {
