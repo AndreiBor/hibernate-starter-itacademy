@@ -7,6 +7,7 @@ import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;
 import org.hibernate.cfg.Configuration;
 import org.junit.jupiter.api.Test;
 
+import javax.persistence.FlushModeType;
 import java.sql.SQLException;
 import java.time.Instant;
 
@@ -19,16 +20,14 @@ class HibernateRunnerTest {
         @Cleanup var session = sessionFactory.openSession();
         session.beginTransaction();
 
-        var result = session.createQuery("""
-                        select u from User u
-                        left join u.company c
-                        where u.personalInfo.firstname = :firstname
-                        and c.name = :company
-                        """, User.class)
+        /*var result = session.createNamedQuery("findUserByNameAndCompany", User.class)
                 .setParameter("firstname", "Ivan")
                 .setParameter("company", "Integral2")
-                .list();
-        System.out.println(result);
+                .setFetchSize(50)
+                .list();*/
+
+        session.createQuery("update User u set u.role = 'Admin'").executeUpdate();
+
 
         session.getTransaction().commit();
     }
