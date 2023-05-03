@@ -12,12 +12,33 @@ import java.time.Instant;
 
 
 class HibernateRunnerTest {
+
+    @Test
+    public void checkHql() {
+        @Cleanup var sessionFactory = HibernateUtil.getConfig().buildSessionFactory();
+        @Cleanup var session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        var result = session.createQuery("""
+                        select u from User u
+                        left join u.company c
+                        where u.personalInfo.firstname = :firstname
+                        and c.name = :company
+                        """, User.class)
+                .setParameter("firstname", "Ivan")
+                .setParameter("company", "Integral2")
+                .list();
+        System.out.println(result);
+
+        session.getTransaction().commit();
+    }
+
     @Test
     public void checkInheritance() {
         @Cleanup var sessionFactory = HibernateUtil.getConfig().buildSessionFactory();
         @Cleanup var session = sessionFactory.openSession();
         session.beginTransaction();
-
+/*
         var company = Company.builder()
                 .name("Yandex")
                 .build();
@@ -43,7 +64,7 @@ class HibernateRunnerTest {
         var programmer1 = session.get(Programmer.class, 1L);
         var manager1 = session.get(User.class, 2L);
 
-        System.out.println();
+        System.out.println();*/
 
         session.getTransaction().commit();
     }
@@ -140,24 +161,24 @@ class HibernateRunnerTest {
 
     @Test
     public void addUserToNewCompany() {
-        /*Configuration configuration = new Configuration();
+        Configuration configuration = new Configuration();
         configuration.configure();
         @Cleanup var sessionFactory = configuration.buildSessionFactory();
         @Cleanup var session = sessionFactory.openSession();
         session.beginTransaction();
 
         var company = Company.builder()
-                .name("Integral")
+                .name("Integral2")
                 .build();
 
         var user = User.builder()
-                .username("int@mail.com")
+                .username("Ivan@mail.com")
                 .build();
 
         company.addUser(user);
 
         session.save(company);
-        session.getTransaction().commit();*/
+        session.getTransaction().commit();
     }
 
     @Test
